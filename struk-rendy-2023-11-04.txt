@@ -1,0 +1,14 @@
+
+                    ************************  PERPUS MINIMALISM  ************************
+                    ************ Sistem Peminjaman Buku Perpustakaan Digital ************
+                    ************************ Struk Bukti Pinjam *************************
+                    
+			Tanggal :  2023-11-04
+			Nama Peminjam Buku :  rendy
+			Judul Buku :  To Kill a Mockingbird by Harper Lee
+			Tanggal Peminjaman :  2023-11-04
+			Tanggal Kembali :  2023-11-13
+
+                            ---Terima Kasih Telah Meminjam Buku Ditempat Kami---
+                            ---Struk Harap Dibawa pada saat pengembalian Buku---
+                    

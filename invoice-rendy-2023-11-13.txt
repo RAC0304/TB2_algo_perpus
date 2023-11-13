@@ -1,0 +1,16 @@
+
+                ************************  PERPUS MINIMALISM  ************************
+                ************ Sistem Peminjaman Buku Perpustakaan Digital ************
+                ************************ Invoice Peminjaman *************************
+                
+			Tanggal :  13 - 11 - 2023
+			Nama Peminjam Buku :  rendy
+			Judul Buku :  To Kill a Mockingbird by Harper Lee
+			Tanggal Peminjaman :  2023-11-13
+			Tanggal Deadline :  2023-11-13
+			Tanggal Kembali :  2023 - 11 - 13
+			Denda :  0  Rupiah
+
+                        ---Terima Kasih Telah Meminjam Buku Ditempat Kami---
+                                            ---LUNAS---
+                

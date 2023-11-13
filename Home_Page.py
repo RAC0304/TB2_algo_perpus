@@ -1,51 +1,51 @@
-import time
-import sys
-import os
-import datetime
 import streamlit as st
+import pymysql
+import pandas as pd
 from PIL import Image
+
+db = pymysql.connect(
+    host='localhost',
+    user='root',  # Replace with your MySQL username
+    password='',  # Replace with your MySQL password
+    database='perpustakaan'  # Replace with your MySQL database name
+)
+cursor = db.cursor()
+
+# Function to create a SQLite connection and fetch book data
+def read_data():
+    cursor.execute("SELECT * FROM buku")
+    result = cursor.fetchall()
+    columns = [col[0] for col in cursor.description]  # Get column names from the cursor
+    df = pd.DataFrame(result, columns=columns)
+    return df
 
 st.set_page_config(page_title="Home Page", page_icon="📚", layout="centered")
 
 st.title(body="📚Selamat Datang Di Perpustakaan")
 st.title("📚Minimalism")
 st.write("Berikut ini adalah daftar buku yang tersedia di perpustakaan kami")
-image = Image.open('./assets/images/1.jpg')
-image1 = Image.open('./assets/images/2.jpg')
-image2 = Image.open('./assets/images/3.jpg')
-image3 = Image.open('./assets/images/4.jpg')
-image4 = Image.open('./assets/images/5.jpg')
-image5 = Image.open('./assets/images/6.jpg')
-image6 = Image.open('./assets/images/7.jpg')
-image7 = Image.open('./assets/images/8.jpg')
-image8 = Image.open('./assets/images/9.jpg')
-image9 = Image.open('./assets/images/10.jpg')
 
-cols = st.columns((1,1,1))
-cols1 = st.columns((1,1,1))
-cols2 = st.columns((1,1,1))
-cols3 = st.columns((1))
+# Fetch book data from the database
+book_data = read_data()
 
-cols[0].image(image,width=200)
-cols[0].write("Tersedia 3 Buku")
-cols[1].image(image1,width=200)
-cols[1].write("Tersedia 2 Buku")
-cols[2].image(image2,width=200)
-cols[2].write("Tersedia 4 Buku")
+# Loop through the book data and display information
+for index, row in book_data.iterrows():
+    cols = st.columns((1, 1, 1))
 
-cols1[0].image(image3,width=200)
-cols1[0].write("Tersedia 1 Buku")
-cols1[1].image(image4,width=200)
-cols1[1].write("Tersedia 2 Buku")
-cols1[2].image(image5,width=200)
-cols1[2].write("Tersedia 2 Buku")
+    # Check if the image file exists
+    if row["image"]:
+        cols[0].image(f'assets/images/{row["image"]}', use_column_width=True, caption="Book Cover")
+    else:
+        cols[0].write("Tidak ada gambar tersedia")
 
-cols2[0].image(image6,width=200)
-cols2[0].write("Tersedia 4 Buku")
-cols2[1].image(image7,width=200)
-cols2[1].write("Tersedia 0 Buku")
-cols2[2].image(image8,width=200)
-cols2[2].write("Tersedia 2 Buku")
+    cols[1].write(f"Judul: {row['judul']}")
+    cols[1].write(f"Pengarang: {row['pengarang']}")
+    cols[1].write(f"Penerbit: {row['penerbit']}")
+    cols[1].write(f"Tahun Terbit: {row['tahun_terbit']}")
+    cols[1].write(f"Tersedia: {row['stok']} Buku")
+    cols[1].write(f"**Kategori:** {row['kategori']} Buku")
 
-cols3[0].image(image9,width=200)
-cols3[0].write("Tersedia 0 Buku")
+    # Add more details as needed
+
+    # Add a separator between books
+    st.markdown("---")
