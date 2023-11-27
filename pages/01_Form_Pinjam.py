@@ -1,9 +1,24 @@
 import time
-import sys
 import os
-import datetime
 from fpdf import FPDF
+import pymysql
+import pandas as pd
 import streamlit as st
+
+# Membuat koneksi ke database MySQL
+db = pymysql.connect(
+    host='localhost',
+    user='root',
+    password='',
+    database='perpustakaan'
+)
+
+# Membuat objek cursor
+cursor = db.cursor()
+
+def pinjam_buku():
+    # Dapatkan id_anggota dari session_state
+    return st.session_state.id_anggota
 
 st.set_page_config(page_title="Menu Peminjaman Buku", page_icon="📖", layout="centered")
 
@@ -13,21 +28,39 @@ st.title("📖 Menu Peminjaman Buku")
 st.write("Silahkan Masukkan Data Diri Anda")
 form1 = st.form(key="annotation1", clear_on_submit=True)
 
+# Fetch book data from the database
+cursor.execute("SELECT * FROM buku")
+result = cursor.fetchall()
+columns = [col[0] for col in cursor.description]  # Get column names from the cursor
+book_data = pd.DataFrame(result, columns=columns)
+
+# Ambil kolom 'judul' dari DataFrame dan konversi ke list
+judul_buku_list = book_data['judul'].tolist()
+
+id_anggota = pinjam_buku()  # Tidak perlu memberikan parameter
 with form1:
     cols = st.columns((1, 1))
     nama = cols[0].text_input("Nama Lengkap :")
-    judul = cols[1].selectbox('Pilih Judul Buku',
-                              ('', 'The Great Gatsby by F. Scott Fitzgerald', 'To Kill a Mockingbird by Harper Lee',
-                               '1984 by George Orwell', 'Pride and Prejudice by Jane Austen',
-                               'The Catcher in the Rye by J.D. Salinger', 'Little Women by Lousia May Alcott',
-                               'Poor Dad Rich Dad by Robert T. Kiyosaki', 'Atomic Habits by James Clear',
-                               'Moby Dick by Herman Melvile', 'Sapiens by Yuval Noah Harari'))
+    judul = cols[1].selectbox('Pilih Judul Buku', ['', *judul_buku_list])
+
+    # Dapatkan id_buku berdasarkan judul
+    filtered_data = book_data.loc[book_data['judul'] == judul, 'id_buku'].values
+
+    if len(filtered_data) > 0:
+        id_buku = filtered_data[0]
+    
+        # st.error('Buku tidak ditemukan.')
+        # Keluar dari fungsi jika buku tidak ditemukan
+      
+
     cols = st.columns(2)
     tglpinjam = cols[0].date_input("Tanggal Peminjaman :")
     tglkembali = cols[1].date_input("Tanggal Kembali :")
     submitted = st.form_submit_button(label="Submit")
 
     if submitted:
+        cursor.execute("INSERT INTO pinjam_buku(id_anggota, id_buku, nama_pinjam, tanggal_pinjam, tanggal_kembali, status) VALUES (%s,%s,%s,%s,%s,%s)", (id_anggota, id_buku,nama, tglpinjam, tglkembali, 'belum dikembalikan'))
+        db.commit()
         st.success(
             "Terimakasih sudah meminjam buku di perpustakaan Minimalism! Jangan lupa simpan struk peminjaman ya")
         st.balloons()
@@ -63,3 +96,6 @@ with form1:
             pdf.output(pdf_file_path)
 
             os.system(pdf_file_path)
+
+if __name__ == "__main__":
+    pinjam_buku()
