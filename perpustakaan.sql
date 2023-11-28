@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Nov 2023 pada 07.55
+-- Waktu pembuatan: 28 Nov 2023 pada 17.03
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -69,7 +69,11 @@ CREATE TABLE `pinjam_buku` (
 
 INSERT INTO `pinjam_buku` (`id_pinjam`, `id_anggota`, `id_buku`, `nama_pinjam`, `tanggal_pinjam`, `tanggal_kembali`, `status`) VALUES
 (3, 1, 3, 'rendy', '2023-11-24', '2023-11-30', 'sudah dikembalikan'),
-(4, 1, 3, 'caca', '2023-11-22', '2023-11-29', 'sudah dikembalikan');
+(4, 1, 3, 'caca', '2023-11-22', '2023-11-29', 'sudah dikembalikan'),
+(5, 1, 4, 'Desi', '2023-11-27', '2023-11-28', 'sudah dikembalikan'),
+(6, 1, 1, 'Jojo', '2023-11-26', '2023-11-28', 'belum dikembalikan'),
+(7, 2, 3, 'Bambang', '2023-11-01', '2023-12-14', 'belum dikembalikan'),
+(8, 1, 3, 'joko', '2023-11-01', '2023-11-19', 'belum dikembalikan');
 
 -- --------------------------------------------------------
 
@@ -80,15 +84,17 @@ INSERT INTO `pinjam_buku` (`id_pinjam`, `id_anggota`, `id_buku`, `nama_pinjam`, 
 CREATE TABLE `users` (
   `id_anggota` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(50) NOT NULL,
+  `nama` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id_anggota`, `username`, `password`) VALUES
-(1, 'admin', 'admin');
+INSERT INTO `users` (`id_anggota`, `username`, `password`, `nama`) VALUES
+(1, 'admin', 'admin', 'Yanto'),
+(2, 'joki', 'joki123', 'Dijoki');
 
 --
 -- Indexes for dumped tables
@@ -128,13 +134,13 @@ ALTER TABLE `buku`
 -- AUTO_INCREMENT untuk tabel `pinjam_buku`
 --
 ALTER TABLE `pinjam_buku`
-  MODIFY `id_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_anggota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_anggota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
